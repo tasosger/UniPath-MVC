@@ -29,7 +29,21 @@ namespace UniPath_MVC.Models
         [EmailAddress]
         public string? Email { get; set; }
 
-          
+        public User(string username, string password, string firstName, string lastName, string email, string? bio = null)
+        {
+            Username = username;
+            Password = password;
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
+            Bio = bio;
+        }
+
+        public User()
+        {
+
+        }
+
 
     }
 }
