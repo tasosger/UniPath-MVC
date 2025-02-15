@@ -22,6 +22,10 @@ namespace UniPath_MVC.Models
         public int ClassId { get; set; }
         [ForeignKey("ClassId")]
         public Class? Class { get; set; }
+
+        public TrueFalseQuestion? Question { get; set; }
+
+
         public Capsule(string title, int classId, string? description = null, string? content = null, string? videoURL = null)
         {
             Title = title;
