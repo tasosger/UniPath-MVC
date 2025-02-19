@@ -1,4 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using System;
+
+
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+//In memory DB
+builder.Services.AddDbContext<UniPath_MVC.Data.AppDbContext>(options =>
+    options.UseInMemoryDatabase("UniPathDB"));
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -23,7 +34,11 @@ app.MapStaticAssets();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+.WithStaticAssets();
+
+
+
+
 
 
 app.Run();
