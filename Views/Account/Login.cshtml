@@ -1,0 +1,63 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "UniPath - Welcome Back";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="page-container">
+        <section class="promo-section">
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+            </div>
+            <div class="promo-content">
+                <h1>Welcome back to UniNote</h1>
+                <p>Continue your learning journey where you left off. Access your personalized study materials and connect with your academic community.</p>
+                <p>Join 1,500+ students already achieving their goals.</p>
+            </div>
+        </section>
+
+        <section class="login-section">
+            <div class="login-header">
+                <h1>Sign In</h1>
+                <p>Access your UniNote account</p>
+            </div>
+
+            @if (ViewData["Error"] != null)
+            {
+                <div class="error-message">
+                    @ViewData["Error"]
+                </div>
+            }
+
+            <form asp-controller="Account" asp-action="Login" method="post">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <button type="submit" class="submit-btn">Sign In</button>
+
+            </form>
+        </section>
+    </div>
+</body>
+</html>
