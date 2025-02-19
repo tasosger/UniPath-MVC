@@ -15,7 +15,7 @@ namespace UniPath_MVC.Models
 
         [Required]
         [DataType(DataType.Password)]
-        public string? Password;
+        public string? Password { get; set; }
 
         [Required]
         public string? FirstName { get; set; }
