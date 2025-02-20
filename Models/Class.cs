@@ -24,7 +24,7 @@ namespace UniPath_MVC.Models
             Name = name;
             TeacherId = teacherId;
             Description = description;
-            Capsules = new List<Capsule>(); // When a Class is created no capsules belong to the class
+            Capsules = new List<Capsule>(); 
         }
         public Class() { 
         

@@ -29,36 +29,48 @@ namespace UniPath_MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
-            Console.WriteLine(password);
-            string hashedPassword = PasswordHelper.ComputeSha256Hash(password);
-            Console.WriteLine(hashedPassword);
-            User? user = await _context.Students
-                .FirstOrDefaultAsync(u => u.Username == username && u.Password == hashedPassword);
-            
-            Console.WriteLine(hashedPassword);
-            if (user == null)
+            try
             {
-                user = await _context.Teachers
+                Console.WriteLine($"Attempting login for user: {username}");
+                Console.WriteLine($"Entered Password: {password}");
+
+                string hashedPassword = PasswordHelper.ComputeSha256Hash(password);
+                Console.WriteLine($"Hashed Password: {hashedPassword}");
+
+                User? user = await _context.Students
                     .FirstOrDefaultAsync(u => u.Username == username && u.Password == hashedPassword);
-            }
 
-            if (user != null)
-            {
-                HttpContext.Session.SetString("Username", user.Username);
-                HttpContext.Session.SetString("UserType", user is Student ? "Student" : "Teacher");
+                if (user == null)
+                {
+                    user = await _context.Teachers
+                        .FirstOrDefaultAsync(u => u.Username == username && u.Password == hashedPassword);
+                }
 
-                //Class page to be implemented (In the complete application a user should be redirected to the home page)
-                return RedirectToAction("Details", "Class", new { id = 1 });
-            } else
-            {
+                if (user != null)
+                {
+                    HttpContext.Session.SetString("Username", user.Username);
+                    HttpContext.Session.SetString("UserType", user is Student ? "Student" : "Teacher");
+
+                    Console.WriteLine($"✅ Login Successful! User: {username} ({(user is Student ? "Student" : "Teacher")})");
+
+                    int classId = 1;  
+                    Console.WriteLine($"Redirecting {username} to /Class/Details?classId={classId}");
+
+                    return RedirectToAction("Details", "Class", new { classId });
+                }
+
+                Console.WriteLine($"Login Failed: Invalid username or password for {username}");
                 ViewData["Error"] = "Invalid username or password";
-               
                 return View();
             }
-
-            ViewData["Error"] = "Invalid username or password";
-            return View();
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error during login: {ex.Message}");
+                ViewData["Error"] = "An unexpected error occurred. Please try again later.";
+                return View();
+            }
         }
+
 
         public IActionResult Logout()
         {
