@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UniPath_MVC.Data;
 using UniPath_MVC.Models;
+using UniPath_MVC.Helpers;
+
 
 namespace UniPath_MVC.Controllers
 {
@@ -27,12 +29,13 @@ namespace UniPath_MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
-            //Passwords are hashed for security perposes
-            string hashedPassword = ComputeSha256Hash(password);
-
+            Console.WriteLine(password);
+            string hashedPassword = PasswordHelper.ComputeSha256Hash(password);
+            Console.WriteLine(hashedPassword);
             User? user = await _context.Students
                 .FirstOrDefaultAsync(u => u.Username == username && u.Password == hashedPassword);
-
+            
+            Console.WriteLine(hashedPassword);
             if (user == null)
             {
                 user = await _context.Teachers
@@ -45,8 +48,12 @@ namespace UniPath_MVC.Controllers
                 HttpContext.Session.SetString("UserType", user is Student ? "Student" : "Teacher");
 
                 //Class page to be implemented (In the complete application a user should be redirected to the home page)
-                return RedirectToAction("Index", "Class");
-
+                return RedirectToAction("Details", "Class", new { id = 1 });
+            } else
+            {
+                ViewData["Error"] = "Invalid username or password";
+               
+                return View();
             }
 
             ViewData["Error"] = "Invalid username or password";
@@ -59,18 +66,6 @@ namespace UniPath_MVC.Controllers
             return RedirectToAction("Login");
         }
 
-        private static string ComputeSha256Hash(string rawData)
-        {
-            using (SHA256 sha256Hash = SHA256.Create())
-            {
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
-                StringBuilder builder = new StringBuilder();
-                foreach (byte t in bytes)
-                {
-                    builder.Append(t.ToString("x2"));
-                }
-                return builder.ToString();
-            }
-        }
+        
     }
 }
