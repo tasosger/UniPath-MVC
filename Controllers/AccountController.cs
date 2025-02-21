@@ -55,7 +55,7 @@ namespace UniPath_MVC.Controllers
 
                     int classId = 1;  
                     Console.WriteLine($"Redirecting {username} to /Class/Details?classId={classId}");
-
+                    HttpContext.Session.SetInt32("UserId", user.Id);
                     return RedirectToAction("Details", "Class", new { classId });
                 }
 

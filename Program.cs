@@ -95,6 +95,16 @@ static void SeedDatabase(AppDbContext context)
     var capsule = new Capsule { Id = 1, Title = "Introduction to Algebra", Description = "Learn basic algebraic concepts", ClassId = 1 };
     context.Classes.Add(mathClass);
     context.Capsules.Add(capsule);
+
+
+    var questions = new List<TrueFalseQuestion>
+        {
+            new TrueFalseQuestion { Id = 1, CapsuleId = 1, Question = "Algebra is a branch of mathematics that deals with symbols.", CorrectAnswer = true },
+            new TrueFalseQuestion { Id = 2, CapsuleId = 1, Question = "In algebra, 'x' always represents a number equal to 10.", CorrectAnswer = false },
+            new TrueFalseQuestion { Id = 3, CapsuleId = 1, Question = "An equation is a mathematical statement that asserts the equality of two expressions.", CorrectAnswer = true }
+        };
+
+    context.TrueFalseQuestions.AddRange(questions);
     context.SaveChanges();
 
     Console.WriteLine("Database Seeding Completed!");

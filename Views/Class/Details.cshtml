@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = Model.Name;
-    var studentsEnrolled = 2;
+    var studentsEnrolled = 2; 
 }
 
 <!DOCTYPE html>
@@ -12,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@Model.Name</title>
     <link rel="stylesheet" href="~/css/class.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
 </head>
 <body>
     <div class="content-wrapper">
@@ -22,11 +23,12 @@
                 <h1>@Model.Name</h1>
                 <p>@Model.Description</p>
             </div>
+            <button class="enroll-button">Enroll</button>
         </div>
 
-        <div class="class-details-tags">
-        </div>
+        
 
+       
         <div class="class-stats-container">
             <div class="class-stats-teacher">
                 <div class="user-tag">
@@ -44,8 +46,6 @@
             <h4>Class Capsules</h4>
             @await Html.PartialAsync("_CapsuleList", ViewData["Capsules"])
         </div>
-
-
     </div>
 </body>
 </html>

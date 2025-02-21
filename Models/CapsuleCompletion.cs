@@ -7,8 +7,8 @@
         public int StudentId { get; set; }
         public bool IsCompleted { get; set; }
 
-        public Capsule Capsule { get; set; }
-        public Student Student { get; set; }
+        public Capsule? Capsule { get; set; }
+        public Student? Student { get; set; }
     }
 
 }
