@@ -80,24 +80,23 @@ app.Run();
 
 static void SeedDatabase(AppDbContext context)
 {
-    if (!context.Students.Any() && !context.Teachers.Any())
-    {
-        Console.WriteLine("Seeding Database...");
+    
+    Console.WriteLine("Seeding Database...");
 
-        string teacherPassword = PasswordHelper.ComputeSha256Hash("pass123");
-        string studentPassword = PasswordHelper.ComputeSha256Hash("pass123");
+    string teacherPassword = PasswordHelper.ComputeSha256Hash("pass123");
+    string studentPassword = PasswordHelper.ComputeSha256Hash("pass123");
 
-        var teacher = new Teacher { Id = 1, Username = "teacher1", Password = teacherPassword, FirstName = "John", LastName = "Doe", Email = "john.doe@unipath.com" };
-        var student = new Student { Id = 2, Username = "student1", Password = studentPassword, FirstName = "Alice", LastName = "Smith", Email = "alice.smith@unipath.com" };
+    var teacher = new Teacher { Id = 1, Username = "teacher1", Password = teacherPassword, FirstName = "John", LastName = "Doe", Email = "john.doe@unipath.com" };
+    var student = new Student { Id = 2, Username = "student1", Password = studentPassword, FirstName = "Alice", LastName = "Smith", Email = "alice.smith@unipath.com" };
 
-        context.Teachers.Add(teacher);
-        context.Students.Add(student);
-        var mathClass = new Class { Id = 1, Name = "Math 101", Description = "Basic Math for Beginners", TeacherId = 1 };
-        var capsule = new Capsule { Id = 1, Title = "Introduction to Algebra", Description = "Learn basic algebraic concepts", ClassId = 1 };
-        context.Classes.Add(mathClass);
-        context.Capsules.Add(capsule);
-        context.SaveChanges();
+    context.Teachers.Add(teacher);
+    context.Students.Add(student);
+    var mathClass = new Class { Id = 1, Name = "Math 101", Description = "Basic Math for Beginners", TeacherId = 1 };
+    var capsule = new Capsule { Id = 1, Title = "Introduction to Algebra", Description = "Learn basic algebraic concepts", ClassId = 1 };
+    context.Classes.Add(mathClass);
+    context.Capsules.Add(capsule);
+    context.SaveChanges();
 
-        Console.WriteLine("Database Seeding Completed!");
-    }
+    Console.WriteLine("Database Seeding Completed!");
+    
 }
