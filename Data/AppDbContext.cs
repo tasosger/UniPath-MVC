@@ -15,5 +15,6 @@ namespace UniPath_MVC.Data
         public DbSet<Student> Students { get; set; }
 
         public DbSet<TrueFalseQuestion> TrueFalseQuestions { get; set; }
+        public DbSet<CapsuleCompletion> CapsuleCompletions { get; set; }
     }
 }
