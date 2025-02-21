@@ -18,20 +18,26 @@ namespace UniPath_MVC.Controllers
         [HttpGet]
         public IActionResult Details(int classId)
         {
-            Console.WriteLine($"🔍 Fetching details for Class ID: {classId}");
-
             var classDetails = _context.Classes
-                .Include(c => c.Teacher)
+                .Include(c => c.Teacher) 
                 .FirstOrDefault(c => c.Id == classId);
 
             if (classDetails == null)
             {
-                Console.WriteLine($"Class with ID {classId} not found!");
                 return NotFound();
             }
 
+            var capsules = _context.Capsules
+                .Where(c => c.ClassId == classId)
+                .ToList();
+
+            ViewData["Capsules"] = capsules;
+
             return View(classDetails);
         }
+
     }
+
+
 }
 

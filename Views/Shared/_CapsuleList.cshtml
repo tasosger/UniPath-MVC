@@ -1,0 +1,19 @@
+﻿@model List<UniPath_MVC.Models.Capsule>
+
+@if (Model != null && Model.Any())
+{
+    @foreach (var capsule in Model)
+    {
+        <a class="capsule-item" asp-controller="Capsule" asp-action="Details" asp-route-id="@capsule.Id">
+            <img src="~/resources/images/capsule-placeholder.jpg" alt="Capsule Image" />
+            <div class="capsule-item-text">
+                <h2>@capsule.Title</h2>
+                <span>About 5 minutes</span>
+            </div>
+        </a>
+    }
+}
+else
+{
+    <p>No capsules found.</p>
+}

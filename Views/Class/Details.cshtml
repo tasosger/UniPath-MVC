@@ -42,8 +42,10 @@
 
         <div class="class-capsule-section">
             <h4>Class Capsules</h4>
-
+            @await Html.PartialAsync("_CapsuleList", ViewData["Capsules"])
         </div>
+
+
     </div>
 </body>
 </html>
