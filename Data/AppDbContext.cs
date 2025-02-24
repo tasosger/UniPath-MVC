@@ -16,6 +16,17 @@ namespace UniPath_MVC.Data
 
         public DbSet<TrueFalseQuestion> TrueFalseQuestions { get; set; }
         public DbSet<CapsuleCompletion> CapsuleCompletions { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<CapsuleCompletion>()
+                .HasKey(cc => cc.Id);
+
+            modelBuilder.Entity<CapsuleCompletion>()
+                .HasIndex(cc => new { cc.CapsuleId, cc.StudentId })
+                .IsUnique();
+        }
 
     }
 }

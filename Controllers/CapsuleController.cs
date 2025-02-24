@@ -63,38 +63,76 @@ public class CapsuleController : Controller
     }
 
     [HttpPost]
-    [Authorize]
-    public IActionResult MarkStudentComplete([FromBody] int capsuleId)
+    public IActionResult MarkStudentComplete([FromBody] CapsuleRequest request)
     {
-        var studentId = HttpContext.Session.GetInt32("UserId");
-        Console.WriteLine("here");
-
-        if (studentId == null)
+        try
         {
-            return Json(new { success = false, message = "Student not logged in." });
-        }
+            Console.WriteLine($"Received request for capsuleId: {request.capsuleId}");
 
-        var existingCompletion = _context.CapsuleCompletions
-            .FirstOrDefault(cc => cc.CapsuleId == capsuleId && cc.StudentId == studentId);
+            var studentId = HttpContext.Session.GetInt32("UserId");
+            Console.WriteLine($"Current studentId from session: {studentId}");
 
-        if (existingCompletion == null)
-        {
-            var completion = new CapsuleCompletion
+            if (studentId == null)
             {
-                CapsuleId = capsuleId,
-                StudentId = studentId.Value,
-                IsCompleted = true
-            };
+                Console.WriteLine("No student ID found in session");
+                return Json(new { success = false, message = "Student not logged in.", error = "NO_SESSION" });
+            }
 
-            _context.CapsuleCompletions.Add(completion);
+            var studentExists = _context.Students.Any(s => s.Id == studentId);
+            Console.WriteLine($"Student exists: {studentExists}");
+            if (!studentExists)
+            {
+                return Json(new { success = false, message = "Student not found.", error = "NO_STUDENT" });
+            }
+
+            var capsuleExists = _context.Capsules.Any(c => c.Id == request.capsuleId);
+            Console.WriteLine($"Capsule exists: {capsuleExists}");
+            if (!capsuleExists)
+            {
+                return Json(new { success = false, message = "Capsule not found.", error = "NO_CAPSULE" });
+            }
+
+            var existingCompletion = _context.CapsuleCompletions
+                .FirstOrDefault(cc => cc.CapsuleId == request.capsuleId && cc.StudentId == studentId);
+            Console.WriteLine($"Existing completion found: {existingCompletion != null}");
+
+            if (existingCompletion == null)
+            {
+                var completion = new CapsuleCompletion
+                {
+                    CapsuleId = request.capsuleId,
+                    StudentId = studentId.Value,
+                    IsCompleted = true
+                };
+                _context.CapsuleCompletions.Add(completion);
+                Console.WriteLine("Added new completion record");
+            }
+            else
+            {
+                existingCompletion.IsCompleted = true;
+                Console.WriteLine("Updated existing completion record");
+            }
+
+            _context.SaveChanges();
+            Console.WriteLine("Changes saved successfully");
+            return Json(new { success = true });
         }
-        else
+        catch (Exception ex)
         {
-            existingCompletion.IsCompleted = true; 
+            Console.WriteLine($"Error in MarkStudentComplete: {ex.Message}");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
+            return Json(new
+            {
+                success = false,
+                message = ex.Message,
+                error = "INTERNAL_ERROR"
+            });
         }
+    }
 
-        _context.SaveChanges();
-        return Json(new { success = true });
+    public class CapsuleRequest
+    {
+        public int capsuleId { get; set; }
     }
 
 }

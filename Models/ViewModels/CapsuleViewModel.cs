@@ -10,5 +10,7 @@ namespace UniPath_MVC.Models.ViewModels
         public bool IsCompleted { get; set; }
 
         public List<Capsule>? CapsulesInClass { get; set; }
+
+        public CapsuleCompletion CapsuleCompletion { get; set; } = new CapsuleCompletion();
     }
 }
