@@ -1,7 +1,15 @@
 ﻿@model UniPath_MVC.Models.Class
 
 @{
+    Layout = null;
     ViewData["Title"] = Model.Name;
+    var userId = Context.Session.GetInt32("UserId");
+
+    if (userId == null)
+    {
+        Context.Response.Redirect("/Account/Login");
+        return;
+    }
     var studentsEnrolled = 2; 
 }
 
@@ -11,6 +19,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@Model.Name</title>
+    <link rel="icon" type="image/x-icon" href="~/favicon.png" />
+
     <link rel="stylesheet" href="~/css/class.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
 </head>
@@ -23,7 +33,6 @@
                 <h1>@Model.Name</h1>
                 <p>@Model.Description</p>
             </div>
-            <button class="enroll-button">Enroll</button>
         </div>
 
         
@@ -32,7 +41,7 @@
         <div class="class-stats-container">
             <div class="class-stats-teacher">
                 <div class="user-tag">
-                    <img src="~/resources/images/teacher-placeholder.png" alt="Teacher Profile" />
+                    <img src="/resources/images/teacher-placeholder.jpg" alt="Teacher Profile" />
                     <span>@(Model.Teacher != null ? $"{Model.Teacher.FirstName} {Model.Teacher.LastName}" : "Unknown Teacher")</span>
                 </div>
             </div>
