@@ -16,5 +16,6 @@ namespace UniPath_MVC.Data
 
         public DbSet<TrueFalseQuestion> TrueFalseQuestions { get; set; }
         public DbSet<CapsuleCompletion> CapsuleCompletions { get; set; }
+
     }
 }

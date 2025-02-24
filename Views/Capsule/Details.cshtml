@@ -410,7 +410,7 @@
                                     <input type="radio" name="question-@tfq.Id" value="false"> False
                                 </label>
                             </div>
-                            <p class="feedback-message"></p> 
+                            <p class="feedback-message"></p>
                         </div>
                             }
 
@@ -431,40 +431,97 @@
         </div>
     </div>
     <script>
-        document.getElementById("check-quiz").addEventListener("click", function () {
-            let allCorrect = true;
-            let questions = document.querySelectorAll(".capsule-question");
+        document.addEventListener("DOMContentLoaded", function () {
+            let checkQuizButton = document.getElementById("check-quiz");
 
-            questions.forEach(question => {
-                let questionId = question.getAttribute("data-question-id");
-                let correctAnswer = question.getAttribute("data-correct-answer"); // "true" or "false"
+            if (!checkQuizButton) {
+                console.error("Error: #check-quiz button not found.");
+                return;
+            }
 
-                let selectedAnswer = document.querySelector(`input[name="question-${questionId}"]:checked`);
-                let feedbackMessage = question.querySelector(".feedback-message");
+            checkQuizButton.addEventListener("click", function () {
+                let allCorrect = true;
+                let userAnswers = {};
+                let questions = document.querySelectorAll(".capsule-question");
 
-                if (selectedAnswer) {
-                    if (selectedAnswer.value === correctAnswer) {
-                        feedbackMessage.innerHTML = "✔ Correct!";
-                        feedbackMessage.style.color = "green";
+                questions.forEach(question => {
+                    let questionId = question.getAttribute("data-question-id");
+                    let correctAnswer = question.getAttribute("data-correct-answer");
+                    let selectedAnswer = document.querySelector(`input[name="question-${questionId}"]:checked`);
+                    let feedbackMessage = question.querySelector(".feedback-message");
+
+                    if (selectedAnswer) {
+                        let isCorrect = selectedAnswer.value === correctAnswer;
+                        userAnswers[questionId] = isCorrect;
+
+                        if (isCorrect) {
+                            feedbackMessage.innerHTML = "✔ Correct!";
+                            feedbackMessage.style.color = "green";
+                        } else {
+                            feedbackMessage.innerHTML = "❌ Wrong! Try again.";
+                            feedbackMessage.style.color = "red";
+                            allCorrect = false;
+                        }
                     } else {
-                        feedbackMessage.innerHTML = "❌ Wrong! Try again.";
-                        feedbackMessage.style.color = "red";
+                        feedbackMessage.innerHTML = "⚠ Please select an answer!";
+                        feedbackMessage.style.color = "orange";
                         allCorrect = false;
                     }
+                });
+
+                let quizResult = document.getElementById("quiz-result");
+
+                if (allCorrect) {
+                    quizResult.innerHTML = "<p style='color: green; font-weight: bold;'>🎉 Congratulations! All answers are correct! Capsule marked as completed.</p>";
+
+                    let capsuleStatus = document.getElementById("capsule-status");
+                    if (!capsuleStatus) {
+                        capsuleStatus = document.createElement("p");
+                        capsuleStatus.id = "capsule-status";
+                        capsuleStatus.className = "capsule-status";
+                        capsuleStatus.style.fontSize = "1.2rem";
+                        capsuleStatus.style.fontWeight = "bold";
+                        document.querySelector(".details").appendChild(capsuleStatus);
+                    }
+
+                    capsuleStatus.innerText = "✅ Completed";
+                    capsuleStatus.style.color = "green";
+
+                    let capsuleIdElement = document.getElementById("capsuleId");
+                    if (!capsuleIdElement) {
+                        console.error("Error: Element #capsuleId not found.");
+                        return;
+                    }
+
+                    let capsuleId = capsuleIdElement.value;
+
+                    fetch(`/Capsule/MarkStudentComplete`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector('input[name="__RequestVerificationToken"]').value
+                        },
+                        body: JSON.stringify({
+                            capsuleId: capsuleId
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log("Server Response:", data);
+                            if (!data.success) {
+                                alert("Error: Unable to mark capsule as completed.");
+                            }
+                        })
+                        .catch(error => console.error("AJAX Error:", error));
                 } else {
-                    feedbackMessage.innerHTML = "⚠ Please select an answer!";
-                    feedbackMessage.style.color = "orange";
-                    allCorrect = false;
+                    quizResult.innerHTML = "<p style='color: red; font-weight: bold;'>❌ Some answers are incorrect. Try again!</p>";
                 }
             });
-
-            let quizResult = document.getElementById("quiz-result");
-            if (allCorrect) {
-                quizResult.innerHTML = "<p style='color: green; font-weight: bold;'>🎉 Congratulations! All answers are correct!</p>";
-            } else {
-                quizResult.innerHTML = "<p style='color: red; font-weight: bold;'>❌ Some answers are incorrect. Try again!</p>";
-            }
         });
+
     </script>
+
+
+
 </body>
 </html>

@@ -6,6 +6,8 @@ using UniPath_MVC.Models;
 using UniPath_MVC.Models.ViewModels;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 public class CapsuleController : Controller
 {
@@ -61,27 +63,38 @@ public class CapsuleController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> MarkAsCompleted(int capsuleId)
+    [Authorize]
+    public IActionResult MarkStudentComplete([FromBody] int capsuleId)
     {
-        var userId = HttpContext.Session.GetInt32("UserId");
-        if (userId == null)
-            return RedirectToAction("Login", "Account");
+        var studentId = HttpContext.Session.GetInt32("UserId");
+        Console.WriteLine("here");
 
-        var existingCompletion = await _context.CapsuleCompletions
-            .FirstOrDefaultAsync(cc => cc.CapsuleId == capsuleId && cc.StudentId == userId.Value);
+        if (studentId == null)
+        {
+            return Json(new { success = false, message = "Student not logged in." });
+        }
+
+        var existingCompletion = _context.CapsuleCompletions
+            .FirstOrDefault(cc => cc.CapsuleId == capsuleId && cc.StudentId == studentId);
 
         if (existingCompletion == null)
         {
             var completion = new CapsuleCompletion
             {
                 CapsuleId = capsuleId,
-                StudentId = userId.Value,
+                StudentId = studentId.Value,
                 IsCompleted = true
             };
+
             _context.CapsuleCompletions.Add(completion);
-            await _context.SaveChangesAsync();
+        }
+        else
+        {
+            existingCompletion.IsCompleted = true; 
         }
 
-        return RedirectToAction("Details", "Capsule", new { capsuleId });
+        _context.SaveChanges();
+        return Json(new { success = true });
     }
+
 }
