@@ -11,6 +11,6 @@ namespace UniPath_MVC.Models.ViewModels
 
         public List<Capsule>? CapsulesInClass { get; set; }
 
-        public CapsuleCompletion CapsuleCompletion { get; set; } = new CapsuleCompletion();
+        public ICollection<CapsuleCompletion>? CapsuleCompletions { get; set; }
     }
 }

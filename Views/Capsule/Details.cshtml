@@ -1,8 +1,10 @@
 ﻿@model UniPath_MVC.Models.ViewModels.CapsuleViewModel
 
 @{
-    ViewData["Title"] = Model.Capsule.Title;
-    bool isCompleted = Model.CapsuleCompletion?.IsCompleted ?? false;
+    var studentId = Context.Session.GetInt32("UserId");
+
+    bool isCompleted = Model.IsCompleted;
+    Console.WriteLine($"Has the student completed the capsule? {isCompleted}");
 }
 
 <!DOCTYPE html>
@@ -447,7 +449,6 @@
             const checkQuizButton = document.getElementById("check-quiz");
             const csrfToken = document.querySelector('input[name="__RequestVerificationToken"]');
 
-            // Early exit if not on a quiz page
             if (!checkQuizButton) {
                 console.log("No quiz found on this page");
                 return;
@@ -459,7 +460,6 @@
                 const questions = document.querySelectorAll(".capsule-question");
                 const capsuleIdElement = document.getElementById("capsuleId");
 
-                // Validate capsuleId exists
                 if (!capsuleIdElement) {
                     console.error("Error: Cannot find capsule ID");
                     alert("Error: System cannot identify the current capsule. Please refresh the page.");
@@ -468,7 +468,6 @@
 
                 const capsuleId = capsuleIdElement.value;
 
-                // Validate CSRF token exists
                 if (!csrfToken) {
                     console.error("Error: CSRF token not found");
                     alert("Error: Security token missing. Please refresh the page.");
@@ -565,10 +564,8 @@
                         }
                         console.log("Capsule marked as complete successfully");
 
-                        // Update UI to show success
                         updateCapsuleStatus();
 
-                        // Show success message
                         const quizResult = document.getElementById("quiz-result");
                         if (quizResult) {
                             quizResult.innerHTML = "<p style='color: green; font-weight: bold;'>🎉 Capsule marked as complete successfully!</p>";
@@ -577,13 +574,11 @@
                     .catch(error => {
                         console.error("Error marking capsule as complete:", error);
 
-                        // Show error in UI
                         const quizResult = document.getElementById("quiz-result");
                         if (quizResult) {
                             quizResult.innerHTML = `<p style='color: red; font-weight: bold;'>❌ Error: ${error.message}</p>`;
                         }
 
-                        // Alert for debugging purposes
                         alert(`Error saving progress: ${error.message}. Check console for details.`);
                     });
             }

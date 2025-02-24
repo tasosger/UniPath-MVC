@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http; // Required for session
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UniPath_MVC.Data;
@@ -28,11 +28,18 @@ public class CapsuleController : Controller
             return NotFound();
 
         var userId = HttpContext.Session.GetInt32("UserId");
-        if (userId == null)
-            return RedirectToAction("Login", "Account"); 
+        if (userId == null) 
+            return RedirectToAction("Login", "Account");
 
-        var isCompleted = await _context.CapsuleCompletions
-            .AnyAsync(cc => cc.CapsuleId == capsuleId && cc.StudentId == userId.Value);
+        string sqlQuery = @"
+            SELECT COUNT(*) FROM CapsuleCompletions 
+            WHERE CapsuleId = {0} AND StudentId = {1}";
+        int? studentId = HttpContext.Session.GetInt32("UserId");
+        Console.WriteLine($"{capsuleId}- {studentId}");
+        int completionCount = await _context.CapsuleCompletions
+            .FromSqlRaw(sqlQuery, capsuleId, studentId.Value).CountAsync();
+
+        bool isCompleted = completionCount > 0;
 
         var viewModel = new CapsuleViewModel
         {
@@ -63,7 +70,7 @@ public class CapsuleController : Controller
     }
 
     [HttpPost]
-    public IActionResult MarkStudentComplete([FromBody] CapsuleRequest request)
+    public async Task<IActionResult> MarkStudentComplete([FromBody] CapsuleRequest request)
     {
         try
         {
@@ -98,14 +105,14 @@ public class CapsuleController : Controller
 
             if (existingCompletion == null)
             {
-                var completion = new CapsuleCompletion
+                CapsuleCompletion completion = new CapsuleCompletion
                 {
                     CapsuleId = request.capsuleId,
                     StudentId = studentId.Value,
                     IsCompleted = true
                 };
                 _context.CapsuleCompletions.Add(completion);
-                Console.WriteLine("Added new completion record");
+                Console.WriteLine($"Added new completion record capsuleId: - {completion.CapsuleId}, {completion.StudentId}");
             }
             else
             {
@@ -114,6 +121,16 @@ public class CapsuleController : Controller
             }
 
             _context.SaveChanges();
+            string sqlQuery = @"
+            SELECT COUNT(*) FROM CapsuleCompletions 
+            WHERE CapsuleId = {0} AND StudentId = {1}";
+            Console.WriteLine($"{request.capsuleId}- {studentId}");
+            int completionCount = await _context.CapsuleCompletions
+            .FromSqlRaw(sqlQuery, request.capsuleId, studentId.Value)
+            .CountAsync();
+
+            bool isCompleted = completionCount > 0;
+            Console.WriteLine(isCompleted);
             Console.WriteLine("Changes saved successfully");
             return Json(new { success = true });
         }
@@ -130,9 +147,15 @@ public class CapsuleController : Controller
         }
     }
 
+
+
+        
+    }
+
+
     public class CapsuleRequest
     {
         public int capsuleId { get; set; }
     }
 
-}
+
