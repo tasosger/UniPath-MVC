@@ -16,6 +16,8 @@ namespace UniPath_MVC.Services
             _context = context;
         }
 
+
+        // class details
         public async Task<Class?> GetClassDetailsAsync(int classId)
         {
             return await _context.Classes
@@ -23,6 +25,8 @@ namespace UniPath_MVC.Services
                 .FirstOrDefaultAsync(c => c.Id == classId);
         }
 
+
+        // get class capsules
         public async Task<List<Capsule>> GetCapsulesForClassAsync(int classId)
         {
             return await _context.Capsules

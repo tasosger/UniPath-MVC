@@ -13,6 +13,8 @@ namespace UniPath_MVC.Services
     public class CapsuleService
     {
         private readonly AppDbContext _context;
+
+        // required for session access
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public CapsuleService(AppDbContext context, IHttpContextAccessor httpContextAccessor)
@@ -20,7 +22,8 @@ namespace UniPath_MVC.Services
             _context = context;
             _httpContextAccessor = httpContextAccessor;
         }
-
+        
+        // get capsule details
         public async Task<CapsuleViewModel?> GetCapsuleDetailsAsync(int capsuleId)
         {
             var capsule = await _context.Capsules
@@ -29,6 +32,7 @@ namespace UniPath_MVC.Services
 
             if (capsule == null) return null;
 
+            // get from session
             int? studentId = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
             if (studentId == null) return null;
 
@@ -43,6 +47,8 @@ namespace UniPath_MVC.Services
             };
         }
 
+
+        // submit question answer
         public async Task<bool?> SubmitAnswerAsync(int questionId, int capsuleId, bool answer)
         {
             int? userId = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
@@ -54,6 +60,8 @@ namespace UniPath_MVC.Services
             return question.CorrectAnswer == answer;
         }
 
+
+        // mark completion
         public async Task<bool> MarkStudentCompleteAsync(int capsuleId)
         {
             int? studentId = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
@@ -84,6 +92,7 @@ namespace UniPath_MVC.Services
             return true;
         }
 
+        // unused method for capsule completion
         public async Task<bool> ResetCompletionAsync(int capsuleId)
         {
             int? studentId = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");

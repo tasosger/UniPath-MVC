@@ -14,11 +14,13 @@ namespace UniPath_MVC.Services
             _context = context;
         }
 
+        // get a specific question
         public async Task<TrueFalseQuestion?> GetQuestionByIdAsync(int questionId)
         {
             return await _context.TrueFalseQuestions.FirstOrDefaultAsync(q => q.Id == questionId);
         }
 
+        // check answer
         public bool ValidateAnswer(TrueFalseQuestion question, bool answer)
         {
             return question.CorrectAnswer == answer;

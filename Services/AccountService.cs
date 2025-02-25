@@ -19,8 +19,10 @@ namespace UniPath_MVC.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
+        // auth method
         public async Task<User?> AuthenticateUserAsync(string username, string password)
         {
+            // hash password
             string hashedPassword = PasswordHelper.ComputeSha256Hash(password);
 
             User? user = await _context.Students
