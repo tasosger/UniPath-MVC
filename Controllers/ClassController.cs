@@ -7,12 +7,16 @@ namespace UniPath_MVC.Controllers
 {
     public class ClassController : Controller
     {
+        // required service
         private readonly ClassService _classService;
 
         public ClassController(ClassService classService)
         {
             _classService = classService;
         }
+
+
+        // get class details
 
         [HttpGet]
         public async Task<IActionResult> Details(int classId)

@@ -7,7 +7,8 @@ using UniPath_MVC.Models;
 namespace UniPath_MVC.Controllers
 {
     public class AccountController : Controller
-    {
+    {   
+        // require service
         private readonly AccountService _accountService;
 
         public AccountController(AccountService accountService)
@@ -15,6 +16,8 @@ namespace UniPath_MVC.Controllers
             _accountService = accountService;
         }
 
+
+        // Login
         public IActionResult Login()
         {
             return View();
@@ -32,7 +35,7 @@ namespace UniPath_MVC.Controllers
                 if (user != null)
                 {
                     _accountService.SignInUser(user);
-                    Console.WriteLine($"✅ Login Successful! User: {username} ({(user is Student ? "Student" : "Teacher")})");
+                    Console.WriteLine($"Login Successful! User: {username} ({(user is Student ? "Student" : "Teacher")})");
 
                     return RedirectToAction("Details", "Class", new { classId = 1 });
                 }
@@ -48,6 +51,7 @@ namespace UniPath_MVC.Controllers
                 return View();
             }
         }
+        // Logout
 
         public IActionResult Logout()
         {

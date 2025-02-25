@@ -6,6 +6,7 @@ namespace UniPath_MVC.Controllers
 {
     public class TrueFalseQuestionController : Controller
     {
+        // required service
         private readonly TrueFalseQuestionService _questionService;
 
         public TrueFalseQuestionController(TrueFalseQuestionService questionService)
@@ -13,6 +14,8 @@ namespace UniPath_MVC.Controllers
             _questionService = questionService;
         }
 
+
+        // answer validation for tfq
         [HttpPost]
         public async Task<IActionResult> SubmitAnswer(int questionId, int capsuleId, bool answer)
         {

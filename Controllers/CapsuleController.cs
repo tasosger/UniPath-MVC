@@ -7,6 +7,8 @@ using UniPath_MVC.Models.ViewModels;
 
 public class CapsuleController : Controller
 {
+
+    // required service
     private readonly CapsuleService _capsuleService;
 
     public CapsuleController(CapsuleService capsuleService)
@@ -14,6 +16,7 @@ public class CapsuleController : Controller
         _capsuleService = capsuleService;
     }
 
+    // Get capsule details
     public async Task<IActionResult> Details(int capsuleId)
     {
         var viewModel = await _capsuleService.GetCapsuleDetailsAsync(capsuleId);
@@ -22,6 +25,7 @@ public class CapsuleController : Controller
         return View(viewModel);
     }
 
+    // submit quiz answers
     [HttpPost]
     public async Task<IActionResult> SubmitAnswer(int questionId, int capsuleId, bool answer)
     {
@@ -32,6 +36,8 @@ public class CapsuleController : Controller
         return RedirectToAction("Details", new { capsuleId });
     }
 
+
+    // mark capsule completion
     [HttpPost]
     public async Task<IActionResult> MarkStudentComplete([FromBody] CapsuleRequest request)
     {
@@ -39,6 +45,8 @@ public class CapsuleController : Controller
         return Json(new { success, message = success ? "Marked as completed" : "Failed to mark complete", error = success ? null : "INTERNAL_ERROR" });
     }
 
+
+    // not use method to reset completion
     [HttpPost]
     [IgnoreAntiforgeryToken]
     public async Task<IActionResult> ResetCompletion([FromBody] CapsuleRequest request)
