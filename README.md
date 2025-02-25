@@ -112,6 +112,26 @@ If the student **answers a question incorrectly**:
 
 ---
 
+
+
+## How to Run the Project
+
+Follow these steps to set up and run the .NET MVC project on your local machine.
+
+### Prerequisites
+
+Ensure you have .NET9 installed
+Apply the following commands in the following order:
+git clone https://github.com/tasosger/UniPath-MVC.git
+dotnet restore
+dotnet ef database update
+dotnet build
+dotnet run
+
+
+
+
+
 ## Generative AI Usage
 
 This project utilizes **Generative AI** to enhance content creation in the following ways:
@@ -126,3 +146,5 @@ This project utilizes **Generative AI** to enhance content creation in the follo
 While AI played a role in content creation, all generated text was reviewed and edited for accuracy, clarity, and relevance.
 
 ---
+
+
