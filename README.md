@@ -118,15 +118,18 @@ If the student **answers a question incorrectly**:
 
 Follow these steps to set up and run the .NET MVC project on your local machine.
 
+
+
 ### Prerequisites
 
 Ensure you have .NET9 installed
 Apply the following commands in the following order:
-git clone https://github.com/tasosger/UniPath-MVC.git
-dotnet restore
-dotnet ef database update
-dotnet build
-dotnet run
+- git clone https://github.com/tasosger/UniPath-MVC.git
+- dotnet restore
+- dotnet ef 
+- database update
+- dotnet build
+- dotnet run
 
 
 
