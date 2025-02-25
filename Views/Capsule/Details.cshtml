@@ -16,376 +16,9 @@
     <title>@Model.Capsule.Title</title>
     <link rel="icon" type="image/x-icon" href="~/favicon.png" />
 
-    <link rel="stylesheet" href="~/css/capsule-details.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/capsule.css" asp-append-version="true">
     <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true">
 </head>
-<style>
-    .content-wrapper {
-        width: 80vw;
-        margin-left: 20vw;
-        padding: 40px 20px;
-        max-width: 1000px;
-    }
-
-    .showcase-image {
-        width: 100%;
-        height: 300px;
-        object-fit: cover;
-        border-radius: 30px;
-        margin-bottom: 40px;
-        border: 2px solid rgba(0, 0, 0, 0.1);
-        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-    }
-
-        .showcase-image:hover {
-            transform: scale(1.01);
-        }
-
-    .class-details-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 20px;
-        margin-bottom: 30px;
-    }
-
-    .class-title-section {
-        flex: 1;
-    }
-
-    .class-details-header h1 {
-        font-family: 'Syne', sans-serif;
-        font-size: 2.5rem;
-        margin-bottom: 15px;
-    }
-
-    .class-details-header p {
-        font-family: 'Manrope', sans-serif;
-        color: #555;
-        line-height: 1.6;
-        font-size: 1.1rem;
-    }
-
-    .enroll-button {
-        align-items: center;
-        background: radial-gradient(farthest-corner at 25% 25%, #B529FA, #7C31FB, #BBC9FF);
-        border: 2px solid #00000080;
-        border-radius: 16px;
-        color: #fff;
-        cursor: pointer;
-        display: flex;
-        font-size: 1rem;
-        font-weight: 500;
-        gap: 14px;
-        max-height: 50px;
-        padding: 8px 26px;
-        position: relative;
-        transition: all .3s;
-    }
-
-
-        .enroll-button.enrolled {
-            background: radial-gradient(farthest-corner at 25% 25%, #55C27E, #37A681, #9FFFC4);
-            border: 2px solid #37A681;
-            color: #fff;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(55, 166, 129, 0.3);
-            transform: scale(0.98);
-        }
-
-
-        .enroll-button:hover {
-            opacity: 0.85;
-            transform: translateY(2px);
-        }
-
-    .class-details-tags {
-        margin: 30px 0;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .type-tag {
-        padding: 8px 16px;
-        background-color: #7C31FB;
-        color: #fff;
-        border-radius: 14px;
-        font-size: 0.9rem;
-        font-family: 'Manrope', sans-serif;
-        transition: transform 0.3s ease;
-    }
-
-        .type-tag:hover {
-            transform: translateY(-2px);
-        }
-
-    .class-stats-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 30px 0;
-        padding: 25px;
-        border-radius: 30px;
-        border: 2px solid rgba(0, 0, 0, 0.1);
-        background-color: #fff;
-        transition: border-color 0.3s ease;
-    }
-
-        .class-stats-container:hover {
-            border-color: rgba(0, 0, 0, 0.3);
-        }
-
-    .class-stats-teacher .user-tag {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .user-tag img {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        border: 2px solid #7C31FB;
-        transition: transform 0.3s ease;
-    }
-
-        .user-tag img:hover {
-            transform: scale(1.1);
-        }
-
-    .user-tag span {
-        font-weight: 600;
-        font-family: 'Manrope', sans-serif;
-        font-size: 1.1rem;
-    }
-
-    .class-stats-students {
-        display: flex;
-        align-items: center;
-        gap: 30px;
-        font-family: 'Manrope', sans-serif;
-    }
-
-    .review-container {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        color: #555;
-    }
-
-    .class-capsule-section {
-        margin-top: 50px;
-    }
-
-        .class-capsule-section h4 {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.8rem;
-            margin-bottom: 25px;
-        }
-
-    .capsule-item {
-        display: flex;
-        align-items: center;
-        gap: 25px;
-        padding: 25px;
-        border-radius: 30px;
-        border: 2px solid rgba(0, 0, 0, 0.1);
-        transition: all 0.3s;
-        margin-bottom: 20px;
-        text-decoration: none;
-        color: inherit;
-        background-color: #fff;
-    }
-
-        .capsule-item:hover {
-            border-color: rgba(0, 0, 0, 0.3);
-            transform: translateY(-3px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .capsule-item img {
-            width: 120px;
-            height: 120px;
-            border-radius: 20px;
-            object-fit: cover;
-        }
-
-    .capsule-item-text {
-        flex: 1;
-    }
-
-        .capsule-item-text h2 {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-        }
-
-        .capsule-item-text span {
-            color: #555;
-            font-size: 1rem;
-            font-family: 'Manrope', sans-serif;
-        }
-
-    .class-qna {
-        margin-top: 60px;
-        padding: 35px;
-        border-radius: 30px;
-        background-color: #ECCBFF;
-        border: 2px solid rgba(0, 0, 0, 0.1);
-    }
-
-        .class-qna h2 {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-        }
-
-        .class-qna p {
-            color: #555;
-            margin-bottom: 25px;
-            font-size: 1.1rem;
-            font-family: 'Manrope', sans-serif;
-        }
-
-        .class-qna textarea {
-            width: 100%;
-            min-height: 120px;
-            padding: 20px;
-            border-radius: 20px;
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            margin-bottom: 25px;
-            font-family: 'Manrope', sans-serif;
-            font-size: 1rem;
-            resize: vertical;
-            outline: none;
-            transition: all 0.3s;
-        }
-
-            .class-qna textarea:focus {
-                border-color: rgba(0, 0, 0, 0.3);
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            }
-
-        .class-qna button {
-            font-family: 'Syne', sans-serif;
-            padding: 14px 50px;
-            font-weight: 600;
-            font-size: 1.05rem;
-            border-radius: 20px;
-            background-color: #7C31FB;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: #fff;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-            .class-qna button:hover {
-                opacity: 0.85;
-                transform: translateY(2px);
-            }
-
-    .custom-alert {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-        display: none;
-    }
-
-    .custom-alert-content {
-        background-color: #ffffff;
-        color: #333333;
-        padding: 20px 30px;
-        border-radius: 10px;
-        text-align: center;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        max-width: 400px;
-        width: 90%;
-    }
-
-        .custom-alert-content p {
-            margin: 0 0 15px;
-            font-size: 1.2em;
-        }
-
-    .custom-alert-btn {
-        background-color: #7C31FB;
-        color: #ffffff;
-        border: none;
-        padding: 10px 20px;
-        font-size: 1em;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-        .custom-alert-btn:hover {
-            background-color: #845cc8;
-        }
-
-    /*media (max-width: 430px) {
-        .content-wrapper {
-            width: 100vw;
-            margin-left: 0;
-            padding: 20px;
-        }
-
-        .class-details-header {
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .enroll-button {
-            width: 100%;
-            text-align: center;
-        }
-
-        .class-stats-container {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .capsule-item {
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 20px;
-        }
-
-        .capsule-item img {
-            width: 100%;
-            height: 180px;
-        }
-
-        .class-qna {
-            padding: 25px;
-        }
-        }
-
-        .capsule-item.completed {
-            border-color: #37A681;
-            background-color: #F0FFF4;
-        }
-
-        .completion-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #37A681;
-            font-size: 0.9rem;
-            margin-top: 8px;
-        } */
-
-</style>
 <body>
     <div class="container">
         <div class="video-section">
@@ -398,127 +31,121 @@
                 <p>@Model.Capsule.Content</p>
                 @if (isCompleted)
                 {
-                    <!-- ✅ If capsule is completed, show this message instead of quiz -->
-                <div id="completion-message">
-                    <h2>🎉 You have completed this capsule! 🎉</h2>
-                    <p>Congratulations! You can now proceed to the next capsule.</p>
-                    <a href="@Url.Action("NextCapsule", "Capsule", new { id = Model.Capsule.Id })" class="button">Next Capsule ➡</a>
-                </div>
+                    <div id="completion-message">
+                        <h2>🎉 You have completed this capsule! 🎉</h2>
+                        <p>Congratulations! You can now proceed to the next capsule.</p>
+                        <button id="retake-quiz" class="button red">🔄 Retake Quiz</button>
+                    </div>
                 }
                 else
                 {
                     @if (Model.TrueFalseQuestions.Any())
                     {
-                   <div class="capsule-quiz-container" id="quiz-section">
-                       <h2>Capsule Quiz</h2>
-                       <form id="quiz-form">
-                           @Html.AntiForgeryToken()
-                           <input type="hidden" id="capsuleId" value="@Model.Capsule.Id">
+                        <div class="capsule-quiz-container" id="quiz-section">
+                            <h2>Capsule Quiz</h2>
+                            <form id="quiz-form">
+                                <input type="hidden" id="capsuleId" value="@Model.Capsule.Id">
+                                @Html.AntiForgeryToken()
 
-                           @foreach (var tfq in Model.TrueFalseQuestions)
-        {
-                           <div class="capsule-question" data-question-id="@tfq.Id" data-correct-answer="@tfq.CorrectAnswer.ToString().ToLower()">
-                               <span>@tfq.Question</span>
-                               <div class="capsule-question-buttons">
-                                   <label>
-                                       <input type="radio" name="question-@tfq.Id" value="true"> True
-                                   </label>
-                                   <label>
-                                       <input type="radio" name="question-@tfq.Id" value="false"> False
-                                   </label>
-                               </div>
-                               <p class="feedback-message"></p>
-                           </div>
-        }
+                                @foreach (var tfq in Model.TrueFalseQuestions)
+                                {
+                                    <div class="capsule-question" data-question-id="@tfq.Id" data-correct-answer="@tfq.CorrectAnswer.ToString().ToLower()">
+                                        <span>@tfq.Question</span>
+                                        <div class="capsule-question-buttons">
+                                            <label>
+                                                <input type="radio" name="question-@tfq.Id" value="true"> True
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="question-@tfq.Id" value="false"> False
+                                            </label>
+                                        </div>
+                                        <p class="feedback-message"></p>
+                                    </div>
+                                }
 
-                           <button type="button" id="check-quiz" class="submit-quiz-button">Check Answers</button>
-                       </form>
+                                <button type="button" id="check-quiz" class="submit-quiz-button">Check Answers</button>
+                            </form>
 
-                       <div id="quiz-result"></div>
-                   </div>
+                            <div id="quiz-result"></div>
+                        </div>
                     }
                 }
 
             </div>
         </div>
-
-        <div class="capsules-section">
-            <h3>Class Capsules</h3>
-            @await Html.PartialAsync("_CapsuleList", ViewData["Capsules"])
-        </div>
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const checkQuizButton = document.getElementById("check-quiz");
-            const csrfToken = document.querySelector('input[name="__RequestVerificationToken"]');
+            const retakeQuizButton = document.getElementById("retake-quiz");
+            const csrfToken = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
 
-            if (!checkQuizButton) {
-                console.log("No quiz found on this page");
-                return;
-            }
+            if (checkQuizButton) {
+                checkQuizButton.addEventListener("click", function () {
+                    let allCorrect = true;
+                    let userAnswers = {};
+                    const questions = document.querySelectorAll(".capsule-question");
+                    const capsuleIdElement = document.getElementById("capsuleId");
 
-            checkQuizButton.addEventListener("click", function () {
-                let allCorrect = true;
-                let userAnswers = {};
-                const questions = document.querySelectorAll(".capsule-question");
-                const capsuleIdElement = document.getElementById("capsuleId");
-
-                if (!capsuleIdElement) {
-                    console.error("Error: Cannot find capsule ID");
-                    alert("Error: System cannot identify the current capsule. Please refresh the page.");
-                    return;
-                }
-
-                const capsuleId = capsuleIdElement.value;
-
-                if (!csrfToken) {
-                    console.error("Error: CSRF token not found");
-                    alert("Error: Security token missing. Please refresh the page.");
-                    return;
-                }
-
-                questions.forEach(question => {
-                    const questionId = question.getAttribute("data-question-id");
-                    const correctAnswer = question.getAttribute("data-correct-answer");
-                    const selectedAnswer = document.querySelector(`input[name="question-${questionId}"]:checked`);
-                    const feedbackMessage = question.querySelector(".feedback-message");
-
-                    if (!feedbackMessage) {
-                        console.error(`Feedback message element not found for question ${questionId}`);
+                    if (!capsuleIdElement) {
+                        console.error("Error: Cannot find capsule ID");
+                        alert("Error: System cannot identify the current capsule. Please refresh the page.");
                         return;
                     }
 
-                    if (selectedAnswer) {
-                        const isCorrect = selectedAnswer.value === correctAnswer;
-                        userAnswers[questionId] = isCorrect;
+                    const capsuleId = capsuleIdElement.value;
 
-                        feedbackMessage.innerHTML = isCorrect ?
-                            "✔ Correct!" :
-                            "❌ Wrong! Try again.";
-                        feedbackMessage.style.color = isCorrect ? "green" : "red";
+                    questions.forEach(question => {
+                        const questionId = question.getAttribute("data-question-id");
+                        const correctAnswer = question.getAttribute("data-correct-answer");
+                        const selectedAnswer = document.querySelector(`input[name="question-${questionId}"]:checked`);
+                        const feedbackMessage = question.querySelector(".feedback-message");
 
-                        if (!isCorrect) allCorrect = false;
+                        if (!feedbackMessage) {
+                            console.error(`Feedback message element not found for question ${questionId}`);
+                            return;
+                        }
+
+                        if (selectedAnswer) {
+                            const isCorrect = selectedAnswer.value === correctAnswer;
+                            userAnswers[questionId] = isCorrect;
+
+                            feedbackMessage.innerHTML = isCorrect ?
+                                "✔ Correct!" :
+                                "❌ Wrong! Try again.";
+                            feedbackMessage.style.color = isCorrect ? "green" : "red";
+
+                            if (!isCorrect) allCorrect = false;
+                        } else {
+                            feedbackMessage.innerHTML = "⚠ Please select an answer!";
+                            feedbackMessage.style.color = "orange";
+                            allCorrect = false;
+                        }
+                    });
+
+                    const quizResult = document.getElementById("quiz-result");
+                    if (!quizResult) {
+                        console.error("Quiz result element not found");
+                        return;
+                    }
+
+                    if (allCorrect) {
+                        quizResult.innerHTML = "<p style='color: green; font-weight: bold;'>🎉 Congratulations! All answers are correct! Capsule marked as completed.</p>";
+                        updateCapsuleStatus();
+                        markCapsuleComplete(capsuleId, csrfToken);
                     } else {
-                        feedbackMessage.innerHTML = "⚠ Please select an answer!";
-                        feedbackMessage.style.color = "orange";
-                        allCorrect = false;
+                        quizResult.innerHTML = "<p style='color: red; font-weight: bold;'>❌ Some answers are incorrect. Try again!</p>";
                     }
                 });
+            } else {
+                console.log("No quiz found on this page");
+            }
 
-                const quizResult = document.getElementById("quiz-result");
-                if (!quizResult) {
-                    console.error("Quiz result element not found");
-                    return;
-                }
-
-                if (allCorrect) {
-                    quizResult.innerHTML = "<p style='color: green; font-weight: bold;'>🎉 Congratulations! All answers are correct! Capsule marked as completed.</p>";
-                    updateCapsuleStatus();
-                    markCapsuleComplete(capsuleId, csrfToken.value);
-                } else {
-                    quizResult.innerHTML = "<p style='color: red; font-weight: bold;'>❌ Some answers are incorrect. Try again!</p>";
-                }
-            });
+            if (retakeQuizButton) {
+                retakeQuizButton.addEventListener("click", function() {
+                    window.location.reload();
+                });
+            }
 
             function updateCapsuleStatus() {
                 let capsuleStatus = document.getElementById("capsule-status");
@@ -543,7 +170,11 @@
             }
 
             function markCapsuleComplete(capsuleId, token) {
-                console.log('Attempting to mark capsule complete:', capsuleId);
+                if (!token) {
+                    console.error("CSRF token not found");
+                    alert("Security token missing. Please refresh the page and try again.");
+                    return;
+                }
 
                 fetch("/Capsule/MarkStudentComplete", {
                     method: "POST",
@@ -554,18 +185,15 @@
                     body: JSON.stringify({ capsuleId: capsuleId })
                 })
                     .then(response => {
-                        console.log('Response status:', response.status);
                         if (!response.ok) {
                             throw new Error(`HTTP error! status: ${response.status}`);
                         }
                         return response.json();
                     })
                     .then(data => {
-                        console.log('Server response:', data);
                         if (!data.success) {
                             throw new Error(data.message || 'Server indicated failure');
                         }
-                        console.log("Capsule marked as complete successfully");
 
                         updateCapsuleStatus();
 
@@ -573,6 +201,8 @@
                         if (quizResult) {
                             quizResult.innerHTML = "<p style='color: green; font-weight: bold;'>🎉 Capsule marked as complete successfully!</p>";
                         }
+
+                        
                     })
                     .catch(error => {
                         console.error("Error marking capsule as complete:", error);
@@ -582,36 +212,10 @@
                             quizResult.innerHTML = `<p style='color: red; font-weight: bold;'>❌ Error: ${error.message}</p>`;
                         }
 
-                        alert(`Error saving progress: ${error.message}. Check console for details.`);
+                        alert(`Error saving progress: ${error.message}. Please try again.`);
                     });
             }
-
-            function updateCapsuleStatus() {
-                let capsuleStatus = document.getElementById("capsule-status");
-                const detailsSection = document.querySelector(".details");
-
-                if (!detailsSection) {
-                    console.error("Details section not found");
-                    return;
-                }
-
-                if (!capsuleStatus) {
-                    capsuleStatus = document.createElement("p");
-                    capsuleStatus.id = "capsule-status";
-                    capsuleStatus.className = "capsule-status";
-                    capsuleStatus.style.fontSize = "1.2rem";
-                    capsuleStatus.style.fontWeight = "bold";
-                    detailsSection.appendChild(capsuleStatus);
-                }
-
-                capsuleStatus.innerText = "✅ Completed";
-                capsuleStatus.style.color = "green";
-            }
         });
-
     </script>
-
-
-
 </body>
 </html>

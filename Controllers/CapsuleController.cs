@@ -31,15 +31,11 @@ public class CapsuleController : Controller
         if (userId == null) 
             return RedirectToAction("Login", "Account");
 
-        string sqlQuery = @"
-            SELECT COUNT(*) FROM CapsuleCompletions 
-            WHERE CapsuleId = {0} AND StudentId = {1}";
+        
         int? studentId = HttpContext.Session.GetInt32("UserId");
         Console.WriteLine($"{capsuleId}- {studentId}");
-        int completionCount = await _context.CapsuleCompletions
-            .FromSqlRaw(sqlQuery, capsuleId, studentId.Value).CountAsync();
-
-        bool isCompleted = completionCount > 0;
+        bool isCompleted = await _context.CapsuleCompletions
+            .AnyAsync(cc => cc.CapsuleId == capsuleId && cc.StudentId == studentId.Value);
 
         var viewModel = new CapsuleViewModel
         {
@@ -149,11 +145,40 @@ public class CapsuleController : Controller
 
 
 
-        
+    [HttpPost]
+    [IgnoreAntiforgeryToken]
+    public async Task<IActionResult> ResetCompletion([FromBody] CapsuleRequest request)
+    {
+        try
+        {
+            var studentId = HttpContext.Session.GetInt32("UserId");
+            if (studentId == null)
+            {
+                return Json(new { success = false, message = "Student not logged in.", error = "NO_SESSION" });
+            }
+
+            var existingCompletion = await _context.CapsuleCompletions
+                .FirstOrDefaultAsync(cc => cc.CapsuleId == request.capsuleId && cc.StudentId == studentId.Value);
+
+            if (existingCompletion != null)
+            {
+                _context.CapsuleCompletions.Remove(existingCompletion);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true, message = "Capsule completion reset." });
+            }
+
+            return Json(new { success = false, message = "Completion record not found.", error = "NO_COMPLETION" });
+        }
+        catch (Exception ex)
+        {
+            return Json(new { success = false, message = ex.Message, error = "INTERNAL_ERROR" });
+        }
     }
 
+}
 
-    public class CapsuleRequest
+
+public class CapsuleRequest
     {
         public int capsuleId { get; set; }
     }
