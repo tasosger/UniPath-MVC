@@ -1,24 +1,18 @@
-﻿using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using UniPath_MVC.Data;
+using UniPath_MVC.Services;
 using UniPath_MVC.Models;
-using UniPath_MVC.Helpers;
-
 
 namespace UniPath_MVC.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly AccountService _accountService;
 
-        public AccountController(AppDbContext context)
+        public AccountController(AccountService accountService)
         {
-            _context = context;
+            _accountService = accountService;
         }
 
         public IActionResult Login()
@@ -32,31 +26,15 @@ namespace UniPath_MVC.Controllers
             try
             {
                 Console.WriteLine($"Attempting login for user: {username}");
-                Console.WriteLine($"Entered Password: {password}");
 
-                string hashedPassword = PasswordHelper.ComputeSha256Hash(password);
-                Console.WriteLine($"Hashed Password: {hashedPassword}");
-
-                User? user = await _context.Students
-                    .FirstOrDefaultAsync(u => u.Username == username && u.Password == hashedPassword);
-
-                if (user == null)
-                {
-                    user = await _context.Teachers
-                        .FirstOrDefaultAsync(u => u.Username == username && u.Password == hashedPassword);
-                }
+                User? user = await _accountService.AuthenticateUserAsync(username, password);
 
                 if (user != null)
                 {
-                    HttpContext.Session.SetString("Username", user.Username);
-                    HttpContext.Session.SetString("UserType", user is Student ? "Student" : "Teacher");
-
+                    _accountService.SignInUser(user);
                     Console.WriteLine($"✅ Login Successful! User: {username} ({(user is Student ? "Student" : "Teacher")})");
 
-                    int classId = 1;  
-                    Console.WriteLine($"Redirecting {username} to /Class/Details?classId={classId}");
-                    HttpContext.Session.SetInt32("UserId", user.Id);
-                    return RedirectToAction("Details", "Class", new { classId });
+                    return RedirectToAction("Details", "Class", new { classId = 1 });
                 }
 
                 Console.WriteLine($"Login Failed: Invalid username or password for {username}");
@@ -71,13 +49,10 @@ namespace UniPath_MVC.Controllers
             }
         }
 
-
         public IActionResult Logout()
         {
-            HttpContext.Session.Clear();
+            _accountService.SignOutUser();
             return RedirectToAction("Login");
         }
-
-        
     }
 }
