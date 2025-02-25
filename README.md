@@ -2,6 +2,7 @@
 
 ## 🌟 Project Overview
 Welcome to **UniPath Capsule System**, an innovative **e-learning platform** designed to enhance student engagement through interactive educational capsules. Built using **Microsoft .NET Core MVC**, this project brings a structured and immersive learning experience to users.
+This project implements the CompleteCapsule use case of the complete UniPath Project.
 
 ---
 
@@ -15,8 +16,6 @@ The UniPath Capsule System is designed to deliver **video-based learning modules
 ✔ **Interactive True/False Quizzes** – Reinforce learning through assessments.  
 ✔ **Student Progress Tracking** – Monitor completion and performance.  
 ✔ **Dynamic Feedback System** – Instant quiz result updates.  
-✔ **Retake Quiz Feature** – Encourage knowledge mastery by allowing reattempts.  
-✔ **Secure User Authentication** – Register and log in for personalized learning.  
 
 ---
 
@@ -29,15 +28,10 @@ This project follows the **MVC (Model-View-Controller)** architecture:
 Current implementation focuses on:  
 ✅ Displaying **video-based capsules**.  
 ✅ Managing **quiz interactions and feedback**.  
-✅ Enabling **progress tracking** for students.  
 
 ---
 
-## 🚀 Future Enhancements
-🔹 Implementing **multichoice quizzes**.  
-🔹 Adding a **leaderboard system** for student engagement.  
-🔹 Enhancing **user analytics & reporting**.  
-🔹 Introducing **certificate generation** upon course completion.  
+
 
 ---
 
