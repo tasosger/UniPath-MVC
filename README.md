@@ -112,16 +112,17 @@ If the student **answers a question incorrectly**:
 
 ---
 
-## 🚀 Getting Started
+## Generative AI Usage
 
-### **🔧 Prerequisites**
-- .NET 9 SDK
-- Microsoft SQL Server
-- Visual Studio 2022 (or VS Code)
-- Git for version control
+This project utilizes **Generative AI** to enhance content creation in the following ways:
 
-### **💻 Installation Steps**
-1. **Clone the repository**
-   ```sh
-   git clone https://github.com/your-repo/UniPath-Capsule-System.git
-   cd UniPath-Capsule-System
+- **Copywriting & Content Generation**  
+  AI-assisted tools were used to generate marketing copy, error messages, and UI text to ensure clarity and engagement.
+  
+- **Documentation Assistance**  
+  Sections of this README, including the installation steps and feature descriptions, were refined with AI-powered suggestions.
+
+
+While AI played a role in content creation, all generated text was reviewed and edited for accuracy, clarity, and relevance.
+
+---
