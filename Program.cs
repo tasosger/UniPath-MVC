@@ -9,6 +9,8 @@ using UniPath_MVC.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+// register services
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<CapsuleService>();
 builder.Services.AddScoped<ClassService>();
@@ -31,6 +33,8 @@ builder.Services.AddSession(options =>
 });
 
 var app = builder.Build();
+
+// cuastom not found page
 app.Use(async (context, next) =>
 {
     await next();
@@ -87,16 +91,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 
-app.Use(async (context, next) =>
-{
-    await next(); 
-
-    if (context.Response.StatusCode == 404)
-    {
-        context.Request.Path = "/Home/NotFound";
-        await next();
-    }
-});
 
 
 
