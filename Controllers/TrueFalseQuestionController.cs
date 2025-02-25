@@ -1,31 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using UniPath_MVC.Data;
-using UniPath_MVC.Models;
-using System.Linq;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using UniPath_MVC.Services;
 
 namespace UniPath_MVC.Controllers
 {
     public class TrueFalseQuestionController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly TrueFalseQuestionService _questionService;
 
-        public TrueFalseQuestionController(AppDbContext context)
+        public TrueFalseQuestionController(TrueFalseQuestionService questionService)
         {
-            _context = context;
+            _questionService = questionService;
         }
 
         [HttpPost]
-        public IActionResult SubmitAnswer(int questionId, int capsuleId, bool answer)
+        public async Task<IActionResult> SubmitAnswer(int questionId, int capsuleId, bool answer)
         {
-            var question = _context.TrueFalseQuestions.FirstOrDefault(q => q.Id == questionId);
+            var question = await _questionService.GetQuestionByIdAsync(questionId);
             if (question == null)
             {
                 return NotFound();
             }
 
-            bool isCorrect = question.CorrectAnswer == answer;
-
+            bool isCorrect = _questionService.ValidateAnswer(question, answer);
             TempData["isAnswerCorrect"] = isCorrect ? "Correct!" : "Wrong. Try again.";
 
             return RedirectToAction("Details", "Capsule", new { capsuleId });

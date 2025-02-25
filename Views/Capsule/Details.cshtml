@@ -58,19 +58,23 @@
             padding: 2rem 3rem;
         }
 
-        .video {
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: var(--shadow-md);
-            background-color: white;
-            border: 1px solid var(--border-color);
+    .video {
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        background-color: white;
+        border: 1px solid var(--border-color);
+        width: 100%; 
+        max-width: 100%;
+    }
+
+        .video iframe {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 9;
+            border: none;
         }
 
-            .video iframe {
-                width: 100%;
-                height: 560px;
-                border: none;
-            }
 
         .details {
             margin-top: 2rem;
@@ -318,11 +322,10 @@
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 const checkQuizButton = document.getElementById("check-quiz");
-                const retakeQuizButton = document.getElementById("retake-quiz");
                 const csrfToken = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
                 const capsuleIdElement = document.getElementById("capsuleId");
                 const capsuleId = capsuleIdElement ? capsuleIdElement.value : null;
-
+                
                 if (checkQuizButton) {
                     checkQuizButton.addEventListener("click", function () {
                         let allCorrect = true;
@@ -381,11 +384,7 @@
                     console.log("No quiz found on this page");
                 }
 
-                if (retakeQuizButton && capsuleId) {
-                    retakeQuizButton.addEventListener("click", function() {
-                        resetCapsuleCompletion(capsuleId);
-                    });
-                }
+            
 
                 function updateCapsuleStatus() {
                     let capsuleStatus = document.getElementById("capsule-status");

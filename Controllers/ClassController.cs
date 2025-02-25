@@ -1,43 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using UniPath_MVC.Data;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using UniPath_MVC.Services;
 using UniPath_MVC.Models;
-using System.Threading.Tasks;
 
 namespace UniPath_MVC.Controllers
 {
     public class ClassController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly ClassService _classService;
 
-        public ClassController(AppDbContext context)
+        public ClassController(ClassService classService)
         {
-            _context = context;
+            _classService = classService;
         }
 
         [HttpGet]
-        public IActionResult Details(int classId)
+        public async Task<IActionResult> Details(int classId)
         {
-            var classDetails = _context.Classes
-                .Include(c => c.Teacher) 
-                .FirstOrDefault(c => c.Id == classId);
-
+            var classDetails = await _classService.GetClassDetailsAsync(classId);
             if (classDetails == null)
             {
                 return NotFound();
             }
 
-            var capsules = _context.Capsules
-                .Where(c => c.ClassId == classId)
-                .ToList();
-
+            var capsules = await _classService.GetCapsulesForClassAsync(classId);
             ViewData["Capsules"] = capsules;
 
             return View(classDetails);
         }
-
     }
-
-
 }
-

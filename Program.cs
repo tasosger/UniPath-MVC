@@ -3,12 +3,18 @@ using System;
 using UniPath_MVC.Data;
 using UniPath_MVC.Helpers;
 using UniPath_MVC.Models;
+using UniPath_MVC.Services;
 
 
 
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<CapsuleService>();
+builder.Services.AddScoped<ClassService>();
+builder.Services.AddScoped<TrueFalseQuestionService>();
 
+builder.Services.AddHttpContextAccessor();
 
 
 //In memory DB
@@ -110,8 +116,43 @@ static void SeedDatabase(AppDbContext context)
 
     context.Teachers.Add(teacher);
     context.Students.Add(student);
-    var mathClass = new Class { Id = 1, Name = "Math 101", Description = "Basic Math for Beginners", TeacherId = 1 };
-    var capsule = new Capsule { Id = 1, Title = "Introduction to Algebra", Description = "Learn basic algebraic concepts", ClassId = 1 };
+    var mathClass = new Class
+    {
+        Id = 1,
+        Name = "Math 101",
+        Description = "An introductory mathematics course designed for beginners. " +
+                      "This course covers fundamental mathematical concepts such as arithmetic, algebra, " +
+                      "geometry, and problem-solving strategies. Students will learn essential skills " +
+                      "needed for real-world applications, including working with numbers, fractions, " +
+                      "equations, and logical reasoning. \n\n" +
+                      "By the end of this course, students will:\n" +
+                      "- Understand basic arithmetic operations (addition, subtraction, multiplication, division)\n" +
+                      "- Develop problem-solving skills using algebraic expressions\n" +
+                      "- Learn the principles of geometry and measurement\n" +
+                      "- Gain confidence in applying math to everyday situations\n\n" +
+                      "This class is perfect for students who want to build a strong mathematical foundation " +
+                      "before progressing to more advanced topics. Led by an experienced instructor, " +
+                      "Math 101 ensures an engaging and supportive learning environment.",
+        TeacherId = 1
+    };
+    var capsule = new Capsule
+    {
+        Id = 1,
+        Title = "Introduction to Algebra",
+        Description = "Learn basic algebraic concepts",
+        ClassId = 1,
+        Content = "Algebra is a branch of mathematics that uses symbols and letters to represent numbers and quantities in formulas and equations. " +
+                  "It is a foundational subject for advanced mathematical studies and has applications in science, engineering, economics, and technology. " +
+                  "This capsule will introduce you to the fundamental concepts of algebra, including variables, expressions, equations, and inequalities. " +
+                  "By the end of this lesson, you will have a strong understanding of how to manipulate algebraic expressions, solve simple equations, " +
+                  "and apply these concepts in real-world scenarios. \n\n" +
+                  "Topics covered include:\n" +
+                  "- Understanding variables and constants\n" +
+                  "- Writing and simplifying expressions\n" +
+                  "- Solving linear equations and inequalities\n" +
+                  "- Applying algebra in problem-solving scenarios\n\n" +
+                  "Let’s get started on your journey into the world of algebra!"
+    };
     context.Classes.Add(mathClass);
     context.Capsules.Add(capsule);
 
