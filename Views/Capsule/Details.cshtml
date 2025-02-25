@@ -326,6 +326,8 @@
                 const capsuleIdElement = document.getElementById("capsuleId");
                 const capsuleId = capsuleIdElement ? capsuleIdElement.value : null;
                 
+
+                // submit answerdd and get result
                 if (checkQuizButton) {
                     checkQuizButton.addEventListener("click", function () {
                         let allCorrect = true;
@@ -385,7 +387,7 @@
                 }
 
             
-
+                // update status
                 function updateCapsuleStatus() {
                     let capsuleStatus = document.getElementById("capsule-status");
                     const detailsSection = document.querySelector(".details");
@@ -441,6 +443,8 @@
                                 quizResult.innerHTML = "<p style='color: green; font-weight: bold;'>🎉 Capsule marked as complete successfully!</p>";
                             }
 
+
+                            // reload window on correct completion
                             setTimeout(() => {
                                 window.location.reload();
                             }, 2000);
@@ -457,6 +461,7 @@
                         });
                 }
 
+                // nor used function -- future enchancement
                 function resetCapsuleCompletion(capsuleId) {
                     if (!capsuleId) {
                         console.error("Capsule ID is required to reset completion");
