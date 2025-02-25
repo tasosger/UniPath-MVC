@@ -1,221 +1,511 @@
-﻿@model UniPath_MVC.Models.ViewModels.CapsuleViewModel
+﻿    @model UniPath_MVC.Models.ViewModels.CapsuleViewModel
 
-@{
-    Layout = null;
-    var studentId = Context.Session.GetInt32("UserId");
+    @{
+        Layout = null;
+        var studentId = Context.Session.GetInt32("UserId");
 
-    bool isCompleted = Model.IsCompleted;
-    Console.WriteLine($"Has the student completed the capsule? {isCompleted}");
-}
+        bool isCompleted = Model.IsCompleted;
+        Console.WriteLine($"Has the student completed the capsule? {isCompleted}");
+    }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@Model.Capsule.Title</title>
-    <link rel="icon" type="image/x-icon" href="~/favicon.png" />
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@Model.Capsule.Title</title>
+        <link rel="icon" type="image/x-icon" href="~/favicon.png" />
 
-    <link rel="stylesheet" href="~/css/capsule.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true">
-</head>
-<body>
-    <div class="container">
-        <div class="video-section">
-            <div class="video">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/bw-NvGvLHtM?si=kfbHkX07Qa-EH_3q"
-                        title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-                </iframe>
-            </div>
-            <div class="details">
-                <p>@Model.Capsule.Content</p>
-                @if (isCompleted)
-                {
-                    <div id="completion-message">
-                        <h2>🎉 You have completed this capsule! 🎉</h2>
-                        <p>Congratulations! You can now proceed to the next capsule.</p>
-                        <button id="retake-quiz" class="button red">🔄 Retake Quiz</button>
-                    </div>
+        <link rel="stylesheet" href="~/css/capsule.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true">
+    </head>
+    <style>
+        :root {
+            --primary-color: #7F3DFF;
+            --primary-light: #ECCBFF;
+            --secondary-color: #00A86B;
+            --accent-color: #FD3C4A;
+            --background-light: #FCFCFC;
+            --text-primary: #212325;
+            --text-secondary: #91919F;
+            --border-color: #F1F1FA;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center; 
+            max-width: 900px;
+            margin: 2rem auto; 
+            gap: 2rem;
+        }
+
+
+        .video-section {
+            flex: 1;
+            max-width: 950px;
+            padding: 2rem 3rem;
+        }
+
+        .video {
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            background-color: white;
+            border: 1px solid var(--border-color);
+        }
+
+            .video iframe {
+                width: 100%;
+                height: 560px;
+                border: none;
+            }
+
+        .details {
+            margin-top: 2rem;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+            .details h1 {
+                font-size: 2rem;
+                color: var(--text-primary);
+                margin-bottom: 1.5rem;
+                font-weight: 600;
+            }
+
+            .details h2 {
+                font-size: 1.5rem;
+                color: var(--text-primary);
+                margin: 2rem 0 1rem;
+            }
+
+            .details p {
+                font-size: 1rem;
+                line-height: 1.6;
+                color: var(--text-secondary);
+            }
+
+        .capsules-section {
+            width: 200px;
+            background-color: white;
+            padding: 2rem;
+            border-left: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+            .capsules-section h3 {
+                font-size: 1.25rem;
+                color: var(--text-primary);
+                margin-bottom: 1.5rem;
+                font-weight: 600;
+            }
+
+        .capsule {
+            display: flex;
+            align-items: center;
+            background-color: var(--background-light);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+            .capsule:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-sm);
+                border-color: var(--primary-color);
+            }
+
+            .capsule.active {
+                background-color: var(--primary-light);
+                border-color: var(--primary-color);
+            }
+
+            .capsule img {
+                width: 48px;
+                height: 48px;
+                margin-right: 1rem;
+                border-radius: 12px;
+            }
+
+        .capsule-desc {
+            flex: 1;
+        }
+
+        .capsule-title {
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .capsule-duration {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .capsule-quiz-container {
+            margin-top: 2rem;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .capsule-question {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background-color: var(--background-light);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .capsule-question-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+            .capsule-question-buttons label {
+                flex: 1;
+                text-align: center;
+                cursor: pointer;
+            }
+
+            .capsule-question-buttons input {
+                display: none;
+            }
+
+                .capsule-question-buttons input:checked + label {
+                    background-color: var(--primary-color);
+                    color: white;
+                    border-color: var(--primary-color);
+                    box-shadow: var(--shadow-md);
                 }
-                else
-                {
-                    @if (Model.TrueFalseQuestions.Any())
+
+
+            .capsule-question-buttons label {
+                padding: 0.75rem 1.5rem;
+                border-radius: 12px;
+                font-size: 1rem;
+                font-weight: bold;
+                border: 2px solid var(--border-color);
+                background-color: white;
+                color: var(--text-primary);
+                transition: all 0.3s ease-in-out;
+                box-shadow: var(--shadow-sm);
+            }
+
+                .capsule-question-buttons label:hover {
+                    background-color: var(--primary-light);
+                    border-color: var(--primary-color);
+                    color: var(--primary-color);
+                }
+
+            .capsule-question-buttons input:checked + label {
+                background-color: var(--primary-color);
+                color: white;
+                border-color: var(--primary-color);
+                box-shadow: var(--shadow-md);
+            }
+
+
+    
+        .submit-quiz-button {
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease-in-out;
+        }
+
+            .submit-quiz-button:hover {
+                background-color: var(--secondary-color); 
+                transform: scale(1.05); 
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            }
+
+        #quiz-section {
+            text-align: center;
+        }
+
+        .submit-quiz-button {
+            display: inline-block;
+            margin-top: 1.5rem;
+        }
+
+    </style>
+
+    <body>
+        <div class="container">
+            <div class="video-section">
+                <div class="video">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/bw-NvGvLHtM?si=kfbHkX07Qa-EH_3q"
+                            title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="details">
+                    <p>@Model.Capsule.Content</p>
+                    @if (isCompleted)
                     {
-                        <div class="capsule-quiz-container" id="quiz-section">
-                            <h2>Capsule Quiz</h2>
-                            <form id="quiz-form">
-                                <input type="hidden" id="capsuleId" value="@Model.Capsule.Id">
-                                @Html.AntiForgeryToken()
-
-                                @foreach (var tfq in Model.TrueFalseQuestions)
-                                {
-                                    <div class="capsule-question" data-question-id="@tfq.Id" data-correct-answer="@tfq.CorrectAnswer.ToString().ToLower()">
-                                        <span>@tfq.Question</span>
-                                        <div class="capsule-question-buttons">
-                                            <label>
-                                                <input type="radio" name="question-@tfq.Id" value="true"> True
-                                            </label>
-                                            <label>
-                                                <input type="radio" name="question-@tfq.Id" value="false"> False
-                                            </label>
-                                        </div>
-                                        <p class="feedback-message"></p>
-                                    </div>
-                                }
-
-                                <button type="button" id="check-quiz" class="submit-quiz-button">Check Answers</button>
-                            </form>
-
-                            <div id="quiz-result"></div>
+                        <div id="completion-message">
+                            <h2>You have completed this capsule!</h2>
+                            <p>Congratulations! You can now proceed to the next capsule.</p>
                         </div>
                     }
-                }
+                    else
+                    {
+                        @if (Model.TrueFalseQuestions.Any())
+                        {
+                            <div class="capsule-quiz-container" id="quiz-section">
+                                <h2>Capsule Quiz</h2>
+                                <form id="quiz-form">
+                                    <input type="hidden" id="capsuleId" value="@Model.Capsule.Id">
+                                    @Html.AntiForgeryToken()
 
-            </div>
-        </div>
-    </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const checkQuizButton = document.getElementById("check-quiz");
-            const retakeQuizButton = document.getElementById("retake-quiz");
-            const csrfToken = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+                                    @foreach (var tfq in Model.TrueFalseQuestions)
+                                    {
+                                        <div class="capsule-question" data-question-id="@tfq.Id" data-correct-answer="@tfq.CorrectAnswer.ToString().ToLower()">
+                                            <span>@tfq.Question</span>
+                                        <div class="capsule-question-buttons">
+                                            <input type="radio" id="true-@tfq.Id" name="question-@tfq.Id" value="true">
+                                            <label for="true-@tfq.Id">True</label>
 
-            if (checkQuizButton) {
-                checkQuizButton.addEventListener("click", function () {
-                    let allCorrect = true;
-                    let userAnswers = {};
-                    const questions = document.querySelectorAll(".capsule-question");
-                    const capsuleIdElement = document.getElementById("capsuleId");
+                                            <input type="radio" id="false-@tfq.Id" name="question-@tfq.Id" value="false">
+                                            <label for="false-@tfq.Id">False</label>
+                                        </div>
+                                            <p class="feedback-message"></p>
+                                        </div>
+                                    }
 
-                    if (!capsuleIdElement) {
-                        console.error("Error: Cannot find capsule ID");
-                        alert("Error: System cannot identify the current capsule. Please refresh the page.");
-                        return;
+                                    <button type="button" id="check-quiz" class="submit-quiz-button">Check Answers</button>
+                                </form>
+
+                                <div id="quiz-result"></div>
+                            </div>
+                        }
                     }
 
-                    const capsuleId = capsuleIdElement.value;
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const checkQuizButton = document.getElementById("check-quiz");
+                const retakeQuizButton = document.getElementById("retake-quiz");
+                const csrfToken = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+                const capsuleIdElement = document.getElementById("capsuleId");
+                const capsuleId = capsuleIdElement ? capsuleIdElement.value : null;
 
-                    questions.forEach(question => {
-                        const questionId = question.getAttribute("data-question-id");
-                        const correctAnswer = question.getAttribute("data-correct-answer");
-                        const selectedAnswer = document.querySelector(`input[name="question-${questionId}"]:checked`);
-                        const feedbackMessage = question.querySelector(".feedback-message");
+                if (checkQuizButton) {
+                    checkQuizButton.addEventListener("click", function () {
+                        let allCorrect = true;
+                        let userAnswers = {};
+                        const questions = document.querySelectorAll(".capsule-question");
 
-                        if (!feedbackMessage) {
-                            console.error(`Feedback message element not found for question ${questionId}`);
+                        if (!capsuleId) {
+                            console.error("Error: Cannot find capsule ID");
+                            alert("Error: System cannot identify the current capsule. Please refresh the page.");
                             return;
                         }
 
-                        if (selectedAnswer) {
-                            const isCorrect = selectedAnswer.value === correctAnswer;
-                            userAnswers[questionId] = isCorrect;
+                        questions.forEach(question => {
+                            const questionId = question.getAttribute("data-question-id");
+                            const correctAnswer = question.getAttribute("data-correct-answer");
+                            const selectedAnswer = document.querySelector(`input[name="question-${questionId}"]:checked`);
+                            const feedbackMessage = question.querySelector(".feedback-message");
 
-                            feedbackMessage.innerHTML = isCorrect ?
-                                "✔ Correct!" :
-                                "❌ Wrong! Try again.";
-                            feedbackMessage.style.color = isCorrect ? "green" : "red";
+                            if (!feedbackMessage) {
+                                console.error(`Feedback message element not found for question ${questionId}`);
+                                return;
+                            }
 
-                            if (!isCorrect) allCorrect = false;
+                            if (selectedAnswer) {
+                                const isCorrect = selectedAnswer.value === correctAnswer;
+                                userAnswers[questionId] = isCorrect;
+
+                                feedbackMessage.innerHTML = isCorrect ?
+                                    "Correct!" :
+                                    "Wrong! Try again.";
+                                feedbackMessage.style.color = isCorrect ? "green" : "red";
+
+                                if (!isCorrect) allCorrect = false;
+                            } else {
+                                feedbackMessage.innerHTML = "Please select an answer!";
+                                feedbackMessage.style.color = "orange";
+                                allCorrect = false;
+                            }
+                        });
+
+                        const quizResult = document.getElementById("quiz-result");
+                        if (!quizResult) {
+                            console.error("Quiz result element not found");
+                            return;
+                        }
+
+                        if (allCorrect) {
+                            quizResult.innerHTML = "<p style='color: green; font-weight: bold;'>Congratulations! All answers are correct! Capsule marked as completed.</p>";
+                            updateCapsuleStatus();
+                            markCapsuleComplete(capsuleId, csrfToken);
                         } else {
-                            feedbackMessage.innerHTML = "⚠ Please select an answer!";
-                            feedbackMessage.style.color = "orange";
-                            allCorrect = false;
+                            quizResult.innerHTML = "<p style='color: red; font-weight: bold;'>Some answers are incorrect. Try again!</p>";
                         }
                     });
+                } else {
+                    console.log("No quiz found on this page");
+                }
 
-                    const quizResult = document.getElementById("quiz-result");
-                    if (!quizResult) {
-                        console.error("Quiz result element not found");
+                if (retakeQuizButton && capsuleId) {
+                    retakeQuizButton.addEventListener("click", function() {
+                        resetCapsuleCompletion(capsuleId);
+                    });
+                }
+
+                function updateCapsuleStatus() {
+                    let capsuleStatus = document.getElementById("capsule-status");
+                    const detailsSection = document.querySelector(".details");
+
+                    if (!detailsSection) {
+                        console.error("Details section not found");
                         return;
                     }
 
-                    if (allCorrect) {
-                        quizResult.innerHTML = "<p style='color: green; font-weight: bold;'>🎉 Congratulations! All answers are correct! Capsule marked as completed.</p>";
-                        updateCapsuleStatus();
-                        markCapsuleComplete(capsuleId, csrfToken);
-                    } else {
-                        quizResult.innerHTML = "<p style='color: red; font-weight: bold;'>❌ Some answers are incorrect. Try again!</p>";
+                    if (!capsuleStatus) {
+                        capsuleStatus = document.createElement("p");
+                        capsuleStatus.id = "capsule-status";
+                        capsuleStatus.className = "capsule-status";
+                        capsuleStatus.style.fontSize = "1.2rem";
+                        capsuleStatus.style.fontWeight = "bold";
+                        detailsSection.appendChild(capsuleStatus);
                     }
-                });
-            } else {
-                console.log("No quiz found on this page");
-            }
 
-            if (retakeQuizButton) {
-                retakeQuizButton.addEventListener("click", function() {
-                    window.location.reload();
-                });
-            }
-
-            function updateCapsuleStatus() {
-                let capsuleStatus = document.getElementById("capsule-status");
-                const detailsSection = document.querySelector(".details");
-
-                if (!detailsSection) {
-                    console.error("Details section not found");
-                    return;
+                    capsuleStatus.innerText = "Completed";
+                    capsuleStatus.style.color = "green";
                 }
 
-                if (!capsuleStatus) {
-                    capsuleStatus = document.createElement("p");
-                    capsuleStatus.id = "capsule-status";
-                    capsuleStatus.className = "capsule-status";
-                    capsuleStatus.style.fontSize = "1.2rem";
-                    capsuleStatus.style.fontWeight = "bold";
-                    detailsSection.appendChild(capsuleStatus);
-                }
+                function markCapsuleComplete(capsuleId, token) {
+                    if (!token) {
+                        console.error("CSRF token not found");
+                        alert("Security token missing. Please refresh the page and try again.");
+                        return;
+                    }
 
-                capsuleStatus.innerText = "✅ Completed";
-                capsuleStatus.style.color = "green";
-            }
-
-            function markCapsuleComplete(capsuleId, token) {
-                if (!token) {
-                    console.error("CSRF token not found");
-                    alert("Security token missing. Please refresh the page and try again.");
-                    return;
-                }
-
-                fetch("/Capsule/MarkStudentComplete", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": token
-                    },
-                    body: JSON.stringify({ capsuleId: capsuleId })
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        return response.json();
+                    fetch("/Capsule/MarkStudentComplete", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": token
+                        },
+                        body: JSON.stringify({ capsuleId: capsuleId })
                     })
-                    .then(data => {
-                        if (!data.success) {
-                            throw new Error(data.message || 'Server indicated failure');
-                        }
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (!data.success) {
+                                throw new Error(data.message || 'Server indicated failure');
+                            }
 
-                        updateCapsuleStatus();
+                            updateCapsuleStatus();
 
-                        const quizResult = document.getElementById("quiz-result");
-                        if (quizResult) {
-                            quizResult.innerHTML = "<p style='color: green; font-weight: bold;'>🎉 Capsule marked as complete successfully!</p>";
-                        }
+                            const quizResult = document.getElementById("quiz-result");
+                            if (quizResult) {
+                                quizResult.innerHTML = "<p style='color: green; font-weight: bold;'>🎉 Capsule marked as complete successfully!</p>";
+                            }
+
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 2000);
+                        })
+                        .catch(error => {
+                            console.error("Error marking capsule as complete:", error);
+
+                            const quizResult = document.getElementById("quiz-result");
+                            if (quizResult) {
+                                quizResult.innerHTML = `<p style='color: red; font-weight: bold;'>❌ Error: ${error.message}</p>`;
+                            }
+
+                            alert(`Error saving progress: ${error.message}. Please try again.`);
+                        });
+                }
+
+                function resetCapsuleCompletion(capsuleId) {
+                    if (!capsuleId) {
+                        console.error("Capsule ID is required to reset completion");
+                        return;
+                    }
+
+                    const retakeButton = document.getElementById("retake-quiz");
+                    if (retakeButton) {
+                        retakeButton.disabled = true;
+                        retakeButton.textContent = "Resetting...";
+                    }
+
+                    fetch("/Capsule/ResetCompletion", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ capsuleId: capsuleId })
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (!data.success) {
+                                if (data.error === "NO_COMPLETION") {
+                                    window.location.reload();
+                                    return;
+                                }
+                                throw new Error(data.message || 'Server indicated failure');
+                            }
 
                         
-                    })
-                    .catch(error => {
-                        console.error("Error marking capsule as complete:", error);
+                        })
+                        .catch(error => {
+                            console.error("Error resetting capsule completion:", error);
 
-                        const quizResult = document.getElementById("quiz-result");
-                        if (quizResult) {
-                            quizResult.innerHTML = `<p style='color: red; font-weight: bold;'>❌ Error: ${error.message}</p>`;
-                        }
+                            if (retakeButton) {
+                                retakeButton.disabled = false;
+                                retakeButton.textContent = "🔄 Retake Quiz";
+                            }
 
-                        alert(`Error saving progress: ${error.message}. Please try again.`);
-                    });
-            }
-        });
-    </script>
-</body>
-</html>
+                            alert(`Error resetting quiz: ${error.message}. Please try again.`);
+                        });
+                }
+            });
+        </script>
+    </body>
+    </html>

@@ -149,6 +149,7 @@ public class CapsuleController : Controller
     [IgnoreAntiforgeryToken]
     public async Task<IActionResult> ResetCompletion([FromBody] CapsuleRequest request)
     {
+        Console.WriteLine("here");
         try
         {
             var studentId = HttpContext.Session.GetInt32("UserId");
