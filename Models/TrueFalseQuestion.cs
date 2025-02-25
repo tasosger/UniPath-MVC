@@ -5,6 +5,7 @@ namespace UniPath_MVC.Models
 {
     public class TrueFalseQuestion
     {
+        // tfq model
         [Key]
         public int Id { get; set; }
 

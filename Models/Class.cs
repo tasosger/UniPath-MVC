@@ -6,6 +6,8 @@ namespace UniPath_MVC.Models
 {
     public class Class
     {
+        // class model
+
         [Key]
         public int Id { get; set; }
 

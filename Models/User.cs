@@ -9,6 +9,7 @@ namespace UniPath_MVC.Models
 
     public abstract class User
     {
+        // user model
         [Key]
         public int Id { get; set; }
 

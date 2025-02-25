@@ -6,6 +6,8 @@ namespace UniPath_MVC.Models
 {
     public class Capsule
     {
+        // capsule model
+
         [Key]
         public int Id { get; set; }
 

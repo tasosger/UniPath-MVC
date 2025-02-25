@@ -7,6 +7,8 @@ namespace UniPath_MVC.Data
 {
     public class AppDbContext : DbContext
     {
+
+        // regisetr classes and schema on db
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Class> Classes { get; set; }

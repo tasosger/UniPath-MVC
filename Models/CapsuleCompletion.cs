@@ -5,6 +5,7 @@ namespace UniPath_MVC.Models
 {
     public class CapsuleCompletion
     {
+        // capsule completion model
         public int Id { get; set; }
         public int CapsuleId { get; set; }
         public int StudentId { get; set; }

@@ -2,6 +2,7 @@
 {
     public class Teacher: User
     {
+        // teacher model, inherits from use
         public string? Specialization { get; set; }
         public string? University { get; set; }
         public string? Hierarchy { get; set; }

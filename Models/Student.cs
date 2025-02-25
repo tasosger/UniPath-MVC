@@ -6,6 +6,7 @@ namespace UniPath_MVC.Models
     
     public class Student: User
     {
+        // student model, iherits from user
         public string? LevelOfEducation { get; set; }
 
         public Student(string username, string password, string firstName, string lastName, string email,

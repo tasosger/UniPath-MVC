@@ -5,6 +5,7 @@ namespace UniPath_MVC.Helpers
 {
     public static class PasswordHelper
     {
+        // cryptography methods
         public static string ComputeSha256Hash(string rawData)
         {
             using (SHA256 sha256Hash = SHA256.Create())
